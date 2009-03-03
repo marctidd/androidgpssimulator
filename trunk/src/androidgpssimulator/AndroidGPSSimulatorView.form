@@ -51,6 +51,7 @@
               <Properties>
                 <Property name="background" type="java.awt.Color" resourceKey="taConsola.background"/>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="foreground" type="java.awt.Color" resourceKey="taConsola.foreground"/>
                 <Property name="rows" type="int" value="5"/>
                 <Property name="text" type="java.lang.String" resourceKey="taConsola.text"/>
@@ -123,7 +124,7 @@
                               </Group>
                               <Component id="btEnviar" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="306" max="32767" attributes="0"/>
+                          <EmptySpace pref="309" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

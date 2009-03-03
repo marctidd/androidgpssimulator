@@ -149,6 +149,7 @@ public class AndroidGPSSimulatorView extends FrameView {
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(androidgpssimulator.AndroidGPSSimulatorApp.class).getContext().getResourceMap(AndroidGPSSimulatorView.class);
         taConsola.setBackground(resourceMap.getColor("taConsola.background")); // NOI18N
         taConsola.setColumns(20);
+        taConsola.setEditable(false);
         taConsola.setForeground(resourceMap.getColor("taConsola.foreground")); // NOI18N
         taConsola.setRows(5);
         taConsola.setText(resourceMap.getString("taConsola.text")); // NOI18N
@@ -214,7 +215,7 @@ public class AndroidGPSSimulatorView extends FrameView {
                             .addComponent(rbDecimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(rbSexagesimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(btEnviar))
-                .addContainerGap(306, Short.MAX_VALUE))
+                .addContainerGap(309, Short.MAX_VALUE))
         );
         pManualLayout.setVerticalGroup(
             pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -495,9 +496,17 @@ public class AndroidGPSSimulatorView extends FrameView {
         JDialog dialog = new ConfigDialog(this.getFrame(), configuracion);
         dialog.setVisible(true);
 
-        agregarInfConsola("Configuración cambiada a: \nDirección = " + configuracion.getHost() + "\nPuerto = " + configuracion.getPort());
+        agregarInfConsola("Configuración cambiada a: \nDirección = "
+                + configuracion.getHost()
+                + "\nPuerto = " + configuracion.getPort()
+                + "\n");
     }
 
+    /**
+     * Añade el texto pasado como argumento a la "consola".
+     * 
+     * @param text
+     */
     private void agregarInfConsola(String text){
         taConsola.append(text);
     }
