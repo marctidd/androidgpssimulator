@@ -4,6 +4,8 @@
 
 package androidgpssimulator;
 
+import androidgpssimulator.gui.ConfigDialog;
+import androidgpssimulator.telnet.ConfigTelnet;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -104,12 +106,33 @@ public class AndroidGPSSimulatorView extends FrameView {
         jScrollPane1 = new javax.swing.JScrollPane();
         taConsola = new javax.swing.JTextArea();
         tbBarraHerramientas = new javax.swing.JToolBar();
+        btAbrir = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pManual = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tfLatitud = new javax.swing.JTextField();
+        tfLongitud = new javax.swing.JTextField();
+        btEnviar = new javax.swing.JButton();
+        rbDecimal = new javax.swing.JRadioButton();
+        rbSexagesimal = new javax.swing.JRadioButton();
         pKML = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableLocations = new javax.swing.JTable();
+        btCargar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        btBack = new javax.swing.JButton();
+        btPlay = new javax.swing.JButton();
+        btNext = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        tfTiempo = new javax.swing.JTextField();
+        tbtRepetir = new javax.swing.JToggleButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        miAbrir = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        menuEditar = new javax.swing.JMenu();
+        miPreferencias = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -117,48 +140,190 @@ public class AndroidGPSSimulatorView extends FrameView {
         statusMessageLabel = new javax.swing.JLabel();
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
+        bgFormatoLatitud = new javax.swing.ButtonGroup();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(androidgpssimulator.AndroidGPSSimulatorApp.class).getContext().getResourceMap(AndroidGPSSimulatorView.class);
+        taConsola.setBackground(resourceMap.getColor("taConsola.background")); // NOI18N
         taConsola.setColumns(20);
+        taConsola.setForeground(resourceMap.getColor("taConsola.foreground")); // NOI18N
         taConsola.setRows(5);
+        taConsola.setText(resourceMap.getString("taConsola.text")); // NOI18N
         taConsola.setName("taConsola"); // NOI18N
         jScrollPane1.setViewportView(taConsola);
 
+        tbBarraHerramientas.setFloatable(false);
         tbBarraHerramientas.setRollover(true);
         tbBarraHerramientas.setName("tbBarraHerramientas"); // NOI18N
+
+        btAbrir.setIcon(resourceMap.getIcon("btAbrir.icon")); // NOI18N
+        btAbrir.setText(resourceMap.getString("btAbrir.text")); // NOI18N
+        btAbrir.setFocusable(false);
+        btAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btAbrir.setName("btAbrir"); // NOI18N
+        btAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbBarraHerramientas.add(btAbrir);
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
         pManual.setName("pManual"); // NOI18N
 
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        tfLatitud.setText(resourceMap.getString("tfLatitud.text")); // NOI18N
+        tfLatitud.setName("tfLatitud"); // NOI18N
+
+        tfLongitud.setText(resourceMap.getString("tfLongitud.text")); // NOI18N
+        tfLongitud.setName("tfLongitud"); // NOI18N
+
+        btEnviar.setText(resourceMap.getString("btEnviar.text")); // NOI18N
+        btEnviar.setName("btEnviar"); // NOI18N
+
+        bgFormatoLatitud.add(rbDecimal);
+        rbDecimal.setText(resourceMap.getString("rbDecimal.text")); // NOI18N
+        rbDecimal.setName("rbDecimal"); // NOI18N
+
+        bgFormatoLatitud.add(rbSexagesimal);
+        rbSexagesimal.setText(resourceMap.getString("rbSexagesimal.text")); // NOI18N
+        rbSexagesimal.setName("rbSexagesimal"); // NOI18N
+
         javax.swing.GroupLayout pManualLayout = new javax.swing.GroupLayout(pManual);
         pManual.setLayout(pManualLayout);
         pManualLayout.setHorizontalGroup(
             pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
+            .addGroup(pManualLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pManualLayout.createSequentialGroup()
+                        .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(rbDecimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rbSexagesimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btEnviar))
+                .addContainerGap(306, Short.MAX_VALUE))
         );
         pManualLayout.setVerticalGroup(
             pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 249, Short.MAX_VALUE)
+            .addGroup(pManualLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rbDecimal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tfLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rbSexagesimal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btEnviar)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(androidgpssimulator.AndroidGPSSimulatorApp.class).getContext().getResourceMap(AndroidGPSSimulatorView.class);
         jTabbedPane1.addTab(resourceMap.getString("pManual.TabConstraints.tabTitle"), pManual); // NOI18N
 
         pKML.setName("pKML"); // NOI18N
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        tableLocations.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Longitud", "Latitud", "Elevación", "Descripción"
+            }
+        ));
+        tableLocations.setName("tableLocations"); // NOI18N
+        jScrollPane2.setViewportView(tableLocations);
+
+        btCargar.setText(resourceMap.getString("btCargar.text")); // NOI18N
+        btCargar.setName("btCargar"); // NOI18N
+
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        btBack.setIcon(resourceMap.getIcon("btBack.icon")); // NOI18N
+        btBack.setText(resourceMap.getString("btBack.text")); // NOI18N
+        btBack.setName("btBack"); // NOI18N
+
+        btPlay.setIcon(resourceMap.getIcon("btPlay.icon")); // NOI18N
+        btPlay.setText(resourceMap.getString("btPlay.text")); // NOI18N
+        btPlay.setName("btPlay"); // NOI18N
+
+        btNext.setIcon(resourceMap.getIcon("btNext.icon")); // NOI18N
+        btNext.setText(resourceMap.getString("btNext.text")); // NOI18N
+        btNext.setName("btNext"); // NOI18N
+
+        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        tfTiempo.setText(resourceMap.getString("tfTiempo.text")); // NOI18N
+        tfTiempo.setName("tfTiempo"); // NOI18N
+
+        tbtRepetir.setText(resourceMap.getString("tbtRepetir.text")); // NOI18N
+        tbtRepetir.setName("tbtRepetir"); // NOI18N
 
         javax.swing.GroupLayout pKMLLayout = new javax.swing.GroupLayout(pKML);
         pKML.setLayout(pKMLLayout);
         pKMLLayout.setHorizontalGroup(
             pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pKMLLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btCargar)
+                        .addGroup(pKMLLayout.createSequentialGroup()
+                            .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btBack, 0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btPlay)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btNext, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel4)
+                        .addComponent(tfTiempo))
+                    .addComponent(tbtRepetir))
+                .addGap(48, 48, 48))
         );
         pKMLLayout.setVerticalGroup(
             pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 249, Short.MAX_VALUE)
+            .addGroup(pKMLLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                    .addGroup(pKMLLayout.createSequentialGroup()
+                        .addComponent(btCargar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btBack)
+                            .addComponent(btPlay)
+                            .addComponent(btNext))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tbtRepetir)))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("pKML.TabConstraints.tabTitle"), pKML); // NOI18N
@@ -193,12 +358,32 @@ public class AndroidGPSSimulatorView extends FrameView {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
+        miAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        miAbrir.setText(resourceMap.getString("miAbrir.text")); // NOI18N
+        miAbrir.setName("miAbrir"); // NOI18N
+        fileMenu.add(miAbrir);
+
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(androidgpssimulator.AndroidGPSSimulatorApp.class).getContext().getActionMap(AndroidGPSSimulatorView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        menuEditar.setText(resourceMap.getString("menuEditar.text")); // NOI18N
+        menuEditar.setName("menuEditar"); // NOI18N
+
+        miPreferencias.setText(resourceMap.getString("miPreferencias.text")); // NOI18N
+        miPreferencias.setName("miPreferencias"); // NOI18N
+        miPreferencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPreferenciasActionPerformed(evt);
+            }
+        });
+        menuEditar.add(miPreferencias);
+
+        menuBar.add(menuEditar);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -251,19 +436,45 @@ public class AndroidGPSSimulatorView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void miPreferenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPreferenciasActionPerformed
+        editarPreferencias();
+    }//GEN-LAST:event_miPreferenciasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgFormatoLatitud;
+    private javax.swing.JButton btAbrir;
+    private javax.swing.JButton btBack;
+    private javax.swing.JButton btCargar;
+    private javax.swing.JButton btEnviar;
+    private javax.swing.JButton btNext;
+    private javax.swing.JButton btPlay;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuEditar;
+    private javax.swing.JMenuItem miAbrir;
+    private javax.swing.JMenuItem miPreferencias;
     private javax.swing.JPanel pKML;
     private javax.swing.JPanel pManual;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JRadioButton rbDecimal;
+    private javax.swing.JRadioButton rbSexagesimal;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JTextArea taConsola;
+    private javax.swing.JTable tableLocations;
     private javax.swing.JToolBar tbBarraHerramientas;
+    private javax.swing.JToggleButton tbtRepetir;
+    private javax.swing.JTextField tfLatitud;
+    private javax.swing.JTextField tfLongitud;
+    private javax.swing.JTextField tfTiempo;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
@@ -273,4 +484,21 @@ public class AndroidGPSSimulatorView extends FrameView {
     private int busyIconIndex = 0;
 
     private JDialog aboutBox;
+
+    /* ######################### MIS VARIABLES ########################### */
+    private ConfigTelnet configuracion = ConfigTelnet.getDefault();
+    /* ######################### MIS FUNCIONES ########################### */
+    public void editarPreferencias(){
+        if(configuracion == null)
+            configuracion = ConfigTelnet.getDefault();
+
+        JDialog dialog = new ConfigDialog(this.getFrame(), configuracion);
+        dialog.setVisible(true);
+
+        agregarInfConsola("Configuración cambiada a: \nDirección = " + configuracion.getHost() + "\nPuerto = " + configuracion.getPort());
+    }
+
+    private void agregarInfConsola(String text){
+        taConsola.append(text);
+    }
 }
