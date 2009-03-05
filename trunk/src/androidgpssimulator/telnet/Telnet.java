@@ -66,16 +66,16 @@ public class Telnet {
     public boolean connect() throws MalformedURLException, IOException{
         //Establecemos la conexión
         URL url = new URL(protocol, config.getHost(), config.getPort(), "", new URLStreamHandler());
-        URLConnection urlConnection = url.openConnection();
-        urlConnection.connect();
+        connection = url.openConnection();
+        connection.connect();
         
-        if (urlConnection instanceof TelnetURLConnection) {
-            ((TelnetURLConnection) urlConnection).setTelnetTerminalHandler(new SimpleTelnetTerminalHandler());
+        if (connection instanceof TelnetURLConnection) {
+            ((TelnetURLConnection) connection).setTelnetTerminalHandler(new SimpleTelnetTerminalHandler());
 		}
 
         //Abrimos los canales de comunicación
-        out = urlConnection.getOutputStream();
-		in = urlConnection.getInputStream();
+        out = connection.getOutputStream();
+		in = connection.getInputStream();
 
         changeState(STATE_CONNECTED);
 
@@ -114,16 +114,17 @@ public class Telnet {
 
         changeState(STATE_TRASNMITTING);
 
-        for(int i = 0; i < text.length(); i++){
-            try {
+        try {
+            for(int i = 0; i < text.length(); i++){
                 out.write(text.charAt(i));
-            } catch (IOException ex) {
-                if(isConnected())
-                    changeState(STATE_CONNECTED);
-                else
-                    changeState(STATE_DISCONNECTED);
-                throw ex;
             }
+            out.write("\n".charAt(0));
+        } catch (IOException ex) {
+            if(isConnected())
+                changeState(STATE_CONNECTED);
+            else
+                changeState(STATE_DISCONNECTED);
+            throw ex;
         }
 
         changeState(STATE_CONNECTED);
@@ -135,7 +136,7 @@ public class Telnet {
      * @return true si está establecida la conexión o false en caso contrario.
      */
     public boolean isConnected(){
-        return ((TelnetURLConnection)connection).connected();
+        return connection != null && ((TelnetURLConnection)connection).connected();
     }
 
 
@@ -153,6 +154,8 @@ public class Telnet {
 
     protected void addNewMessage(String message){
         this.messages.add(message);
+
+        System.out.println("Mensaje recibido: " + message);
 
         Iterator<ITelnetListener> it = eventListeners.iterator();
         while(it.hasNext()){
@@ -192,12 +195,13 @@ public class Telnet {
                         //La cargamos en un buffer
                         StringBuffer message = new StringBuffer();
                         for(int i=0; i < disp; i++)
-                            message.append(in.read());
+                            message.append((char)in.read());
 
                         //Y la guardamos como mensaje recibido
                         addNewMessage(message.toString());
                     }
                     catch(IOException e){
+                        if(state != STATE_DISCONNECTED)
                         addNewMessage("Telnet error. Fallo al recibir el mensaje. " + e.getMessage());
                     }
                 }
