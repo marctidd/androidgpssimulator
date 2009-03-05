@@ -5,7 +5,14 @@
 package androidgpssimulator;
 
 import androidgpssimulator.gui.ConfigDialog;
+import androidgpssimulator.gui.ErrorDialog;
+import androidgpssimulator.locationSender.Location;
+import androidgpssimulator.locationSender.LocationSender;
+import androidgpssimulator.locationSender.LocationSenderDisconnectedException;
+import androidgpssimulator.locationSender.LocationSenderUnknowException;
+import androidgpssimulator.locationSender.LocationSenderUnreachableEmulator;
 import androidgpssimulator.telnet.ConfigTelnet;
+import org.jdesktop.application.Task;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -13,6 +20,7 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -107,6 +115,8 @@ public class AndroidGPSSimulatorView extends FrameView {
         taConsola = new javax.swing.JTextArea();
         tbBarraHerramientas = new javax.swing.JToolBar();
         btAbrir = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        tbtConectar = new javax.swing.JToggleButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pManual = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -168,6 +178,23 @@ public class AndroidGPSSimulatorView extends FrameView {
         btAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         tbBarraHerramientas.add(btAbrir);
 
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        tbBarraHerramientas.add(jSeparator1);
+
+        tbtConectar.setIcon(resourceMap.getIcon("tbtConectar.icon")); // NOI18N
+        tbtConectar.setText(resourceMap.getString("tbtConectar.text")); // NOI18N
+        tbtConectar.setFocusable(false);
+        tbtConectar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        tbtConectar.setName("tbtConectar"); // NOI18N
+        tbtConectar.setPressedIcon(resourceMap.getIcon("tbtConectar.pressedIcon")); // NOI18N
+        tbtConectar.setSelectedIcon(resourceMap.getIcon("tbtConectar.selectedIcon")); // NOI18N
+        tbtConectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtConectarActionPerformed(evt);
+            }
+        });
+        tbBarraHerramientas.add(tbtConectar);
+
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
         pManual.setName("pManual"); // NOI18N
@@ -186,13 +213,20 @@ public class AndroidGPSSimulatorView extends FrameView {
 
         btEnviar.setText(resourceMap.getString("btEnviar.text")); // NOI18N
         btEnviar.setName("btEnviar"); // NOI18N
+        btEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEnviarActionPerformed(evt);
+            }
+        });
 
         bgFormatoLatitud.add(rbDecimal);
+        rbDecimal.setSelected(true);
         rbDecimal.setText(resourceMap.getString("rbDecimal.text")); // NOI18N
         rbDecimal.setName("rbDecimal"); // NOI18N
 
         bgFormatoLatitud.add(rbSexagesimal);
         rbSexagesimal.setText(resourceMap.getString("rbSexagesimal.text")); // NOI18N
+        rbSexagesimal.setEnabled(false);
         rbSexagesimal.setName("rbSexagesimal"); // NOI18N
 
         javax.swing.GroupLayout pManualLayout = new javax.swing.GroupLayout(pManual);
@@ -449,6 +483,14 @@ public class AndroidGPSSimulatorView extends FrameView {
         editarPreferencias();
     }//GEN-LAST:event_miPreferenciasActionPerformed
 
+    private void tbtConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtConectarActionPerformed
+        conectar_desconectar();
+    }//GEN-LAST:event_tbtConectarActionPerformed
+
+    private void btEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEnviarActionPerformed
+        enviarLocalizacion();
+    }//GEN-LAST:event_btEnviarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgFormatoLatitud;
     private javax.swing.JButton btAbrir;
@@ -463,6 +505,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
@@ -480,6 +523,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private javax.swing.JTextArea taConsola;
     private javax.swing.JTable tableLocations;
     private javax.swing.JToolBar tbBarraHerramientas;
+    private javax.swing.JToggleButton tbtConectar;
     private javax.swing.JToggleButton tbtRepetir;
     private javax.swing.JTextField tfLatitud;
     private javax.swing.JTextField tfLongitud;
@@ -496,6 +540,8 @@ public class AndroidGPSSimulatorView extends FrameView {
 
     /* ######################### MIS VARIABLES ########################### */
     private ConfigTelnet configuracion = ConfigTelnet.getDefault();
+    private LocationSender transmisor = new LocationSender(configuracion);
+    private Location localizacion;
     /* ######################### MIS FUNCIONES ########################### */
     public void editarPreferencias(){
         if(configuracion == null)
@@ -517,5 +563,90 @@ public class AndroidGPSSimulatorView extends FrameView {
      */
     private void agregarInfConsola(String text){
         taConsola.append(text);
+    }
+
+    private void conectar_desconectar(){
+        Task t = null;
+        if(transmisor.isConnected()){
+            t = new Task(this.getApplication()) {
+
+                @Override
+                protected Object doInBackground() throws Exception {
+                    boolean desconectado = false;
+                    try{
+                        desconectado = transmisor.disconnect();
+                    }catch(Exception e){
+                        mostrarDialogoError(e);
+                    }
+                    tbtConectar.setSelected(!desconectado);
+
+                    return null;
+                }
+            };
+        }
+        else{
+            t = new Task(this.getApplication()) {
+
+                @Override
+                protected Object doInBackground() throws Exception {
+                    boolean conectado = false;
+
+                    try{
+                        conectado = transmisor.connect();
+                    }catch(Exception e){
+                        mostrarDialogoError(e);
+                    }
+
+                    tbtConectar.setSelected(conectado);
+
+                    return null;
+                }
+            };
+        }
+        ejecutarTarea(t);
+    }
+
+    private void enviarLocalizacion(){
+        try{
+            float lat = Float.parseFloat(tfLatitud.getText());
+            float longit = Float.parseFloat(tfLongitud.getText());
+            int altitud = 0;
+
+            if(localizacion == null)
+                localizacion = new Location(lat, longit, 0);
+            else{
+                localizacion.setLatitude(lat);
+                localizacion.setLongitude(longit);
+                localizacion.setAltitude(altitud);
+            }
+
+            Task t = new Task(this.getApplication()) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    try{
+                        transmisor.send(localizacion);
+                    }catch(LocationSenderDisconnectedException e){
+                        mostrarDialogoError(e);
+                    }catch(LocationSenderUnknowException e){
+                        mostrarDialogoError(e);
+                    }
+                    return null;
+                }
+            };
+            ejecutarTarea(t);
+
+        }catch(NumberFormatException e){
+            mostrarDialogoError(e);
+        }
+    }
+
+    private void ejecutarTarea(Task t){
+        this.getApplication().getContext().getTaskService().execute(t);
+    }
+
+    private void mostrarDialogoError(Exception e){
+        System.out.println("Error: " + e.getMessage());
+        JDialog dialog = new ErrorDialog(this.getFrame(), e);
+        dialog.setVisible(true);
     }
 }
