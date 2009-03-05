@@ -10,33 +10,33 @@ package androidgpssimulator.locationSender;
  * @author JuanmaSP
  */
 public class Location {
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
     private int altitude;
 
-    public Location(float latitude, float longitude){
+    public Location(double latitude, double longitude){
         this(latitude, longitude, 0);
     }
 
-    public Location(float latitude, float longitude, int altitude){
+    public Location(double latitude, double longitude, int altitude){
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
     }
 
-    public float getLatitude(){
+    public double getLatitude(){
         return this.latitude;
     }
 
-    public void setLatitude(float lat){
+    public void setLatitude(double lat){
         this.latitude = lat;
     }
 
-    public float getLongitude(){
+    public double getLongitude(){
         return this.longitude;
     }
 
-    public void setLongitude(float longit){
+    public void setLongitude(double longit){
         this.longitude = longit;
     }
 

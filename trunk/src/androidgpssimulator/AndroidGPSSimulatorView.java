@@ -6,11 +6,16 @@ package androidgpssimulator;
 
 import androidgpssimulator.gui.ConfigDialog;
 import androidgpssimulator.gui.ErrorDialog;
+import androidgpssimulator.kml.KMLToRute;
 import androidgpssimulator.locationSender.Location;
 import androidgpssimulator.locationSender.LocationSender;
 import androidgpssimulator.locationSender.LocationSenderDisconnectedException;
 import androidgpssimulator.locationSender.LocationSenderUnknowException;
 import androidgpssimulator.telnet.ConfigTelnet;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -19,10 +24,15 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * The application's main frame.
@@ -303,11 +313,11 @@ public class AndroidGPSSimulatorView extends FrameView {
 
             },
             new String [] {
-                "Nombre", "Latitud", "Longitud", "Elevación", "Descripción"
+                "Latitud", "Longitud", "Elevación"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -319,6 +329,11 @@ public class AndroidGPSSimulatorView extends FrameView {
 
         btCargar.setText(resourceMap.getString("btCargar.text")); // NOI18N
         btCargar.setName("btCargar"); // NOI18N
+        btCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCargarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
@@ -330,6 +345,11 @@ public class AndroidGPSSimulatorView extends FrameView {
         btPlay.setIcon(resourceMap.getIcon("btPlay.icon")); // NOI18N
         btPlay.setText(resourceMap.getString("btPlay.text")); // NOI18N
         btPlay.setName("btPlay"); // NOI18N
+        btPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPlayActionPerformed(evt);
+            }
+        });
 
         btNext.setIcon(resourceMap.getIcon("btNext.icon")); // NOI18N
         btNext.setText(resourceMap.getString("btNext.text")); // NOI18N
@@ -514,6 +534,15 @@ public class AndroidGPSSimulatorView extends FrameView {
         enviarLocalizacion();
     }//GEN-LAST:event_btEnviarActionPerformed
 
+    private void btCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCargarActionPerformed
+        abrirLocalizaciones();
+    }//GEN-LAST:event_btCargarActionPerformed
+
+    private void btPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPlayActionPerformed
+        System.out.println("Pulsado play");
+        enviarLocalizaciones();
+    }//GEN-LAST:event_btPlayActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgFormatoLatitud;
     private javax.swing.JButton btAbrir;
@@ -567,6 +596,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private ConfigTelnet configuracion = ConfigTelnet.getDefault();
     private LocationSender transmisor = new LocationSender(configuracion);
     private Location localizacion;
+    private List<Location> localizaciones = null;
     /* ######################### MIS FUNCIONES ########################### */
     public void editarPreferencias(){
         if(configuracion == null)
@@ -635,8 +665,8 @@ public class AndroidGPSSimulatorView extends FrameView {
 
     private void enviarLocalizacion(){
         try{
-            float lat = Float.parseFloat(tfLatitud.getText());
-            float longit = Float.parseFloat(tfLongitud.getText());
+            double lat = Double.parseDouble(tfLatitud.getText());
+            double longit = Double.parseDouble(tfLongitud.getText());
             int altitud = Integer.parseInt(tfAltitud.getText());
 
             if(localizacion == null)
@@ -667,6 +697,85 @@ public class AndroidGPSSimulatorView extends FrameView {
         }catch(NumberFormatException e){
             mostrarDialogoError(e);
         }
+    }
+
+    private void abrirLocalizaciones(){
+        JFileChooser dialog = new JFileChooser();
+        dialog.setDialogType(JFileChooser.OPEN_DIALOG);
+        dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        dialog.setMultiSelectionEnabled(false);
+
+        if(dialog.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION){
+            try {
+                localizaciones = KMLToRute.KMLToRute(dialog.getSelectedFile());
+
+                //Borramos las antiguas filas.
+                DefaultTableModel model = (DefaultTableModel) tableLocations.getModel();
+                for(int i=0; i < model.getRowCount(); i++)
+                    model.removeRow(i);
+
+
+                Task t = new Task(this.getApplication()) {
+
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        this.setMessage("Abriendo KML...");
+                        Iterator<Location> it = localizaciones.iterator();
+                        DefaultTableModel model = (DefaultTableModel) tableLocations.getModel();
+                        while (it.hasNext()) {
+                            Location loc = it.next();
+                            model.addRow(new Object[]{loc.getLatitude(), loc.getLongitude(), loc.getAltitude()});
+                        }
+                        this.setMessage("Localizaciones cargadas");
+                        return null;
+                    }
+                };
+                ejecutarTarea(t);
+            } catch (Exception ex) {
+                mostrarDialogoError(ex);
+            }
+        }
+    }
+
+    private void enviarLocalizaciones(){
+        Task t = new Task(this.getApplication()) {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                Iterator<Location> it = localizaciones.iterator();
+                int i = 0;
+                float actual = 0.0f;
+                float total = localizaciones.size();
+                int espera = Integer.parseInt(tfTiempo.getText());
+                System.out.println("TRansmitiendo localizaciones");
+                try{
+                    while(it.hasNext()){
+                        Location loc = it.next();
+
+                        this.setProgress(actual / total);
+                        this.setMessage("Transmitiendo: " + loc);
+                        System.out.println("Transmitiendo: " + loc);
+
+                        try{
+                            transmisor.send(loc);
+                        }
+                        catch(LocationSenderUnknowException e){
+                            this.setMessage("Fallo al transmitir " + loc);
+                        }
+                        this.getTaskService().awaitTermination(espera, TimeUnit.MILLISECONDS);
+                        actual += 1.0;
+                    }
+                    this.setMessage("Transmitidos todas las localizaciones");
+                    this.setProgress(1.0f);
+                }
+                catch(LocationSenderDisconnectedException e){
+                    mostrarDialogoError(e);
+                }
+
+                return null;
+            }
+        };
+        ejecutarTarea(t);
     }
 
     private void ejecutarTarea(Task t){
