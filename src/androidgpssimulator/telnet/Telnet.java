@@ -202,7 +202,7 @@ public class Telnet {
                     }
                     catch(IOException e){
                         if(state != STATE_DISCONNECTED)
-                        addNewMessage("Telnet error. Fallo al recibir el mensaje. " + e.getMessage());
+                            addNewMessage("Telnet error. Fallo al recibir el mensaje. " + e.getMessage());
                     }
                 }
                 try {

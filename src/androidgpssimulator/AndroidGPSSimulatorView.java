@@ -10,7 +10,6 @@ import androidgpssimulator.locationSender.Location;
 import androidgpssimulator.locationSender.LocationSender;
 import androidgpssimulator.locationSender.LocationSenderDisconnectedException;
 import androidgpssimulator.locationSender.LocationSenderUnknowException;
-import androidgpssimulator.locationSender.LocationSenderUnreachableEmulator;
 import androidgpssimulator.telnet.ConfigTelnet;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.Action;
@@ -20,7 +19,6 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -126,6 +124,8 @@ public class AndroidGPSSimulatorView extends FrameView {
         btEnviar = new javax.swing.JButton();
         rbDecimal = new javax.swing.JRadioButton();
         rbSexagesimal = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        tfAltitud = new javax.swing.JTextField();
         pKML = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableLocations = new javax.swing.JTable();
@@ -205,9 +205,12 @@ public class AndroidGPSSimulatorView extends FrameView {
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
+        tfLatitud.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         tfLatitud.setText(resourceMap.getString("tfLatitud.text")); // NOI18N
+        tfLatitud.setMaximumSize(new java.awt.Dimension(6, 200));
         tfLatitud.setName("tfLatitud"); // NOI18N
 
+        tfLongitud.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         tfLongitud.setText(resourceMap.getString("tfLongitud.text")); // NOI18N
         tfLongitud.setName("tfLongitud"); // NOI18N
 
@@ -229,6 +232,13 @@ public class AndroidGPSSimulatorView extends FrameView {
         rbSexagesimal.setEnabled(false);
         rbSexagesimal.setName("rbSexagesimal"); // NOI18N
 
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        tfAltitud.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfAltitud.setText(resourceMap.getString("tfAltitud.text")); // NOI18N
+        tfAltitud.setName("tfAltitud"); // NOI18N
+
         javax.swing.GroupLayout pManualLayout = new javax.swing.GroupLayout(pManual);
         pManual.setLayout(pManualLayout);
         pManualLayout.setHorizontalGroup(
@@ -237,19 +247,26 @@ public class AndroidGPSSimulatorView extends FrameView {
                 .addContainerGap()
                 .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pManualLayout.createSequentialGroup()
-                        .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(rbDecimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(rbSexagesimal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(btEnviar))
-                .addContainerGap(309, Short.MAX_VALUE))
+                            .addGroup(pManualLayout.createSequentialGroup()
+                                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tfLatitud, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                                    .addComponent(tfLongitud)
+                                    .addComponent(tfAltitud))
+                                .addGap(87, 87, 87))
+                            .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(rbDecimal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rbSexagesimal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap(371, Short.MAX_VALUE))
+                    .addGroup(pManualLayout.createSequentialGroup()
+                        .addComponent(btEnviar)
+                        .addContainerGap(645, Short.MAX_VALUE))))
         );
         pManualLayout.setVerticalGroup(
             pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,16 +274,22 @@ public class AndroidGPSSimulatorView extends FrameView {
                 .addContainerGap()
                 .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rbDecimal))
+                    .addComponent(tfLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(tfLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rbSexagesimal))
+                    .addComponent(tfLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfAltitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addComponent(rbDecimal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbSexagesimal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btEnviar)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(resourceMap.getString("pManual.TabConstraints.tabTitle"), pManual); // NOI18N
@@ -343,14 +366,14 @@ public class AndroidGPSSimulatorView extends FrameView {
                         .addComponent(jLabel4)
                         .addComponent(tfTiempo))
                     .addComponent(tbtRepetir))
-                .addGap(48, 48, 48))
+                .addGap(92, 92, 92))
         );
         pKMLLayout.setVerticalGroup(
             pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pKMLLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pKMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                     .addGroup(pKMLLayout.createSequentialGroup()
                         .addComponent(btCargar)
                         .addGap(18, 18, 18)
@@ -377,12 +400,12 @@ public class AndroidGPSSimulatorView extends FrameView {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(tbBarraHerramientas, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
+            .addComponent(tbBarraHerramientas, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
@@ -390,7 +413,7 @@ public class AndroidGPSSimulatorView extends FrameView {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addComponent(tbBarraHerramientas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -452,11 +475,11 @@ public class AndroidGPSSimulatorView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 573, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -503,6 +526,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
@@ -525,6 +549,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private javax.swing.JToolBar tbBarraHerramientas;
     private javax.swing.JToggleButton tbtConectar;
     private javax.swing.JToggleButton tbtRepetir;
+    private javax.swing.JTextField tfAltitud;
     private javax.swing.JTextField tfLatitud;
     private javax.swing.JTextField tfLongitud;
     private javax.swing.JTextField tfTiempo;
@@ -572,12 +597,14 @@ public class AndroidGPSSimulatorView extends FrameView {
 
                 @Override
                 protected Object doInBackground() throws Exception {
+                    this.setMessage("Desconectado...");
                     boolean desconectado = false;
                     try{
                         desconectado = transmisor.disconnect();
                     }catch(Exception e){
                         mostrarDialogoError(e);
                     }
+                    this.setMessage("Desconectado");
                     tbtConectar.setSelected(!desconectado);
 
                     return null;
@@ -590,13 +617,13 @@ public class AndroidGPSSimulatorView extends FrameView {
                 @Override
                 protected Object doInBackground() throws Exception {
                     boolean conectado = false;
-
+                    this.setMessage("Conectando a " + configuracion.getHost() + ":" + configuracion.getPort() + " ...");
                     try{
                         conectado = transmisor.connect();
                     }catch(Exception e){
                         mostrarDialogoError(e);
                     }
-
+                    this.setMessage("Conectado a " + configuracion.getHost() + ":" + configuracion.getPort());
                     tbtConectar.setSelected(conectado);
 
                     return null;
@@ -610,7 +637,7 @@ public class AndroidGPSSimulatorView extends FrameView {
         try{
             float lat = Float.parseFloat(tfLatitud.getText());
             float longit = Float.parseFloat(tfLongitud.getText());
-            int altitud = 0;
+            int altitud = Integer.parseInt(tfAltitud.getText());
 
             if(localizacion == null)
                 localizacion = new Location(lat, longit, 0);
@@ -623,8 +650,10 @@ public class AndroidGPSSimulatorView extends FrameView {
             Task t = new Task(this.getApplication()) {
                 @Override
                 protected Object doInBackground() throws Exception {
+                    this.setMessage("Transmitiendo localización...");
                     try{
                         transmisor.send(localizacion);
+                        this.setMessage("Localización transmitida");
                     }catch(LocationSenderDisconnectedException e){
                         mostrarDialogoError(e);
                     }catch(LocationSenderUnknowException e){
