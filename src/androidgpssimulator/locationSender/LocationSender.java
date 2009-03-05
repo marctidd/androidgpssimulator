@@ -57,6 +57,7 @@ public class LocationSender {
         } catch (TelnetDisconnectException ex) {
             throw new LocationSenderDisconnectedException(ex.getMessage());
         }
+        //@TODO Realizar comprobación de mensaje recibido de vuelta.
         sent = true;
 
         return sent;
