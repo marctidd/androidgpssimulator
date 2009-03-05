@@ -18,14 +18,22 @@ import androidgpssimulator.telnet.ConfigTelnet;
  * @author JuanmaSP
  */
 public class ConfigDialog extends javax.swing.JDialog {
+    public static final int APROVE = 1;
+    public static final int CANCEL = 2;
 
     private ConfigTelnet config;
+    private int state;
 
     /** Creates new form ConfigDialog */
     public ConfigDialog(java.awt.Frame parent, ConfigTelnet config) {
         super(parent, true);
         this.config = config;
         initComponents();
+    }
+
+    public int mostrar(boolean visible){
+        super.setVisible(visible);
+        return state;
     }
 
     /** This method is called from within the constructor to
@@ -129,6 +137,7 @@ public class ConfigDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        this.state = CANCEL;
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
@@ -145,6 +154,7 @@ public class ConfigDialog extends javax.swing.JDialog {
         }catch(IllegalArgumentException e){
             recuperarInfOrig();
         }
+        this.state = APROVE;
         this.dispose();
     }//GEN-LAST:event_btAceptarActionPerformed
 

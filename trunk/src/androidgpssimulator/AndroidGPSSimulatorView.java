@@ -246,9 +246,17 @@ public class AndroidGPSSimulatorView extends FrameView {
 
             },
             new String [] {
-                "Nombre", "Longitud", "Latitud", "Elevación", "Descripción"
+                "Nombre", "Latitud", "Longitud", "Elevación", "Descripción"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         tableLocations.setName("tableLocations"); // NOI18N
         jScrollPane2.setViewportView(tableLocations);
 
@@ -493,13 +501,13 @@ public class AndroidGPSSimulatorView extends FrameView {
         if(configuracion == null)
             configuracion = ConfigTelnet.getDefault();
 
-        JDialog dialog = new ConfigDialog(this.getFrame(), configuracion);
-        dialog.setVisible(true);
-
-        agregarInfConsola("Configuración cambiada a: \nDirección = "
-                + configuracion.getHost()
-                + "\nPuerto = " + configuracion.getPort()
-                + "\n");
+        ConfigDialog dialog = new ConfigDialog(this.getFrame(), configuracion);
+        if(dialog.mostrar(true) == ConfigDialog.APROVE){
+            agregarInfConsola("Configuración cambiada a: \nDirección = "
+                    + configuracion.getHost()
+                    + "\nPuerto = " + configuracion.getPort()
+                    + "\n");
+        }
     }
 
     /**
