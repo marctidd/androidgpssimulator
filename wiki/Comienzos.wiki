@@ -1,5 +1,3 @@
-#summary One-sentence summary of this page.
-
 = Comienzos =
 
 He comenzado este proyecto para facilitar la creación de aplicaciones Android. En teoría el simulador de Android (ddms) trae esta funcionalidad. Pero como no conseguí hacerla funcionar y sí hacerla funcionar manualmente a través de Telnet (localhost:5554) pues se me ocurrió automatizarlo.
