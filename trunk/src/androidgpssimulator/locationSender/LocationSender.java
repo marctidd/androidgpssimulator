@@ -90,10 +90,10 @@ public class LocationSender {
 
         String command = String.format(Locale.US, format,
                 new Object[] {
-                    Integer.valueOf(c.get(11)),
-                    Integer.valueOf(c.get(12)),
-                    Integer.valueOf(c.get(13)),
-                    Integer.valueOf(c.get(14)),
+                    Integer.valueOf(c.get(Calendar.HOUR_OF_DAY)),
+                    Integer.valueOf(c.get(Calendar.MINUTE)),
+                    Integer.valueOf(c.get(Calendar.SECOND)),
+                    Integer.valueOf(c.get(Calendar.MILLISECOND)),
                     Integer.valueOf(latDegree),
                     Double.valueOf(latMinute),
                     Character.valueOf(latDireccion),
