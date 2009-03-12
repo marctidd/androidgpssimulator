@@ -12,10 +12,6 @@ import androidgpssimulator.locationSender.LocationSender;
 import androidgpssimulator.locationSender.LocationSenderDisconnectedException;
 import androidgpssimulator.locationSender.LocationSenderUnknowException;
 import androidgpssimulator.telnet.ConfigTelnet;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -636,7 +632,7 @@ public class AndroidGPSSimulatorView extends FrameView {
                     }
                     this.setMessage("Desconectado");
                     tbtConectar.setSelected(!desconectado);
-
+                    tbtConectar.setText("Conectar");
                     return null;
                 }
             };
@@ -655,7 +651,7 @@ public class AndroidGPSSimulatorView extends FrameView {
                     }
                     this.setMessage("Conectado a " + configuracion.getHost() + ":" + configuracion.getPort());
                     tbtConectar.setSelected(conectado);
-
+                    tbtConectar.setText("Desconectar");
                     return null;
                 }
             };
@@ -747,13 +743,14 @@ public class AndroidGPSSimulatorView extends FrameView {
                 float actual = 0.0f;
                 float total = localizaciones.size();
                 int espera = Integer.parseInt(tfTiempo.getText());
-                System.out.println("TRansmitiendo localizaciones");
+                System.out.println("Transmitiendo localizaciones");
                 try{
                     while(it.hasNext()){
                         Location loc = it.next();
 
                         this.setProgress(actual / total);
                         this.setMessage("Transmitiendo: " + loc);
+                        
                         System.out.println("Transmitiendo: " + loc);
 
                         try{

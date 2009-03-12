@@ -74,20 +74,18 @@ public class LocationSender {
 
         double absLong = Math.abs(longitude);
         int longDegree = (int)Math.floor(absLong);
-        char longDirection = 'E';
+        char longDireccion = 'E';
         if (longitude < 0D) {
-          longDirection = 'W';
+          longDireccion = 'W';
         }
-
         double longMinute = (absLong - Math.floor(absLong)) * 60.0D;
 
         double absLat = Math.abs(latitude);
         int latDegree = (int)Math.floor(absLat);
-        char latDirection = 'N';
+        char latDireccion = 'N';
         if (latitude < 0D) {
-          latDirection = 'S';
+          latDireccion = 'S';
         }
-
         double latMinute = (absLat - Math.floor(absLat)) * 60.0D;
 
         String command = String.format(Locale.US, format,
@@ -98,10 +96,10 @@ public class LocationSender {
                     Integer.valueOf(c.get(14)),
                     Integer.valueOf(latDegree),
                     Double.valueOf(latMinute),
-                    Character.valueOf(latDirection),
+                    Character.valueOf(latDireccion),
                     Integer.valueOf(longDegree),
                     Double.valueOf(longMinute),
-                    Character.valueOf(longDirection) });
+                    Character.valueOf(longDireccion) });
 
         return command;
     }
