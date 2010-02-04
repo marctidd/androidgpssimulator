@@ -52,8 +52,6 @@ public class LocationSender {
         boolean sent = false;
 
         String command = getCommand(loc.getLongitude(), loc.getLatitude(), loc.getAltitude());
-
-        System.out.println(command);
         
         try {
             telnetConnection.sendComand(command);
