@@ -112,6 +112,8 @@ public class Telnet {
         if(!isConnected())
             throw new TelnetDisconnectException("No se puede transmitir un comando sin conexión");
 
+        System.out.println("< " + text);
+        
         changeState(STATE_TRASNMITTING);
 
         try {
@@ -155,7 +157,7 @@ public class Telnet {
     protected void addNewMessage(String message){
         this.messages.add(message);
 
-        System.out.println("Mensaje recibido: " + message);
+        System.out.println("> " + message);
 
         Iterator<ITelnetListener> it = eventListeners.iterator();
         while(it.hasNext()){
@@ -194,8 +196,11 @@ public class Telnet {
                         //Hay información para leer
                         //La cargamos en un buffer
                         StringBuffer message = new StringBuffer();
-                        for(int i=0; i < disp; i++)
-                            message.append((char)in.read());
+                        char c;
+                        for(int i=0; i < disp; i++){
+                            c = (char) in.read();
+                            message.append(c);
+                        }
 
                         //Y la guardamos como mensaje recibido
                         addNewMessage(message.toString());

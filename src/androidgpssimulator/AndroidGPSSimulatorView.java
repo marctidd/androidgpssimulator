@@ -12,6 +12,7 @@ import androidgpssimulator.locationSender.LocationSender;
 import androidgpssimulator.locationSender.LocationSenderDisconnectedException;
 import androidgpssimulator.locationSender.LocationSenderUnknowException;
 import androidgpssimulator.telnet.ConfigTelnet;
+import java.io.IOException;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -20,6 +21,8 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +42,15 @@ public class AndroidGPSSimulatorView extends FrameView {
         super(app);
 
         initComponents();
+
+        //Redirijimos "System.out.println()" a la consola.
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                taConsola.append(new String(new char[]{(char)b}));
+                taConsola.setCaretPosition(taConsola.getDocument().getLength());
+            }
+        }));
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -167,6 +179,7 @@ public class AndroidGPSSimulatorView extends FrameView {
         taConsola.setColumns(20);
         taConsola.setEditable(false);
         taConsola.setForeground(resourceMap.getColor("taConsola.foreground")); // NOI18N
+        taConsola.setLineWrap(true);
         taConsola.setRows(5);
         taConsola.setText(resourceMap.getString("taConsola.text")); // NOI18N
         taConsola.setName("taConsola"); // NOI18N
@@ -738,32 +751,35 @@ public class AndroidGPSSimulatorView extends FrameView {
 
             @Override
             protected Object doInBackground() throws Exception {
-                Iterator<Location> it = localizaciones.iterator();
-                int i = 0;
-                float actual = 0.0f;
+
                 float total = localizaciones.size();
                 int espera = Integer.parseInt(tfTiempo.getText());
                 System.out.println("Transmitiendo localizaciones");
                 try{
-                    while(it.hasNext()){
-                        Location loc = it.next();
+                    do{
+                        Iterator<Location> it = localizaciones.iterator();
+                        float actual = 0.0f;
+                        while(it.hasNext()){
+                            Location loc = it.next();
 
-                        this.setProgress(actual / total);
-                        this.setMessage("Transmitiendo: " + loc);
-                        
-                        System.out.println("Transmitiendo: " + loc);
+                            this.setProgress(actual / total);
+                            this.setMessage("Transmitiendo: " + loc);
 
-                        try{
-                            transmisor.send(loc);
+                            System.out.println("Transmitiendo: " + loc);
+
+                            try{
+                                transmisor.send(loc);
+                                //tableLocations.changeSelection((int)actual, 1, false, false);
+                            }
+                            catch(LocationSenderUnknowException e){
+                                this.setMessage("Fallo al transmitir " + loc);
+                            }
+                            this.getTaskService().awaitTermination(espera, TimeUnit.MILLISECONDS);
+                            actual += 1.0;
                         }
-                        catch(LocationSenderUnknowException e){
-                            this.setMessage("Fallo al transmitir " + loc);
-                        }
-                        this.getTaskService().awaitTermination(espera, TimeUnit.MILLISECONDS);
-                        actual += 1.0;
-                    }
-                    this.setMessage("Transmitidos todas las localizaciones");
-                    this.setProgress(1.0f);
+                        this.setMessage("Transmitidos todas las localizaciones");
+                        this.setProgress(1.0f);
+                    }while(tbtRepetir.isSelected());
                 }
                 catch(LocationSenderDisconnectedException e){
                     mostrarDialogoError(e);
