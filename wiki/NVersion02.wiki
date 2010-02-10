@@ -15,3 +15,4 @@ Puesto que se ha conseguido de una manera un tanto tosca pero efectiva, los prim
 
 == Capturas ==
 A continuación mostramos algunas capturas de la interfaz realizada hasta el momento.
+|| <a href="http://img193.imageshack.us/i/21270689.png/" target="_blank"><img src="http://img193.imageshack.us/img193/6914/21270689.th.png" border="0"/></a> || <a href="http://img153.imageshack.us/i/24470515.png/" target="_blank"><img src="http://img153.imageshack.us/img153/3566/24470515.th.png" border="0"/></a> || <a href="http://img37.imageshack.us/i/77303116.png/" target="_blank"><img src="http://img37.imageshack.us/img37/5170/77303116.th.png" border="0"/></a> ||
