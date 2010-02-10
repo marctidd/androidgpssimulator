@@ -1,0 +1,17 @@
+#summary version 0.2
+
+= Paso a la versión 0.2=
+Puesto que se ha conseguido de una manera un tanto tosca pero efectiva, los primeros objetivos (que eran mandar coordenadas GPS), ¿por qué no plantear una mejora y extenderlo a toda la funcionalidad que nos ofrece el emulador de Android? Para ello se plantea realizar una nueva versión (cualquier ayuda será bienvenida), la 0.2, en la 
+
+
+== Puntos a solucionar/mejorar ==
+
+ # Recepción correcta de los mensajes telnet de entrada.
+ # Añadir funcionalidad de sms y gsm del emulador.
+ # Añadir funcionalidad de energía del mismo.
+ # Añadir funcionalidad de envio de eventos.
+ # Mejorar el aspecto gráfico general del programa.
+ # ...
+
+== Capturas ==
+A continuación mostramos algunas capturas de la interfaz realizada hasta el momento.
