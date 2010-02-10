@@ -11,6 +11,7 @@ Puesto que se ha conseguido de una manera un tanto tosca pero efectiva, los prim
  # Añadir funcionalidad de energía del mismo.
  # Añadir funcionalidad de envio de eventos.
  # Mejorar el aspecto gráfico general del programa.
+ # ...
 
 == Capturas ==
 A continuación mostramos algunas capturas de la interfaz realizada hasta el momento.
