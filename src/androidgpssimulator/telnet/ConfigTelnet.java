@@ -48,7 +48,7 @@ public class ConfigTelnet {
     }
 
     public void setPort(String port) throws NumberFormatException, IllegalArgumentException{
-        setPort(Integer.parseInt(host));
+        setPort(Integer.parseInt(port));
     }
 
     public int getPort(){

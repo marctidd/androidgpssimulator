@@ -617,6 +617,12 @@ public class AndroidGPSSimulatorView extends FrameView {
                     + configuracion.getHost()
                     + "\nPuerto = " + configuracion.getPort()
                     + "\n");
+
+            //Conectamos y reconectamos para que cargue la nueva configuración
+            if(transmisor.isConnected()){
+                conectar_desconectar();
+                conectar_desconectar();
+            }
         }
     }
 
@@ -632,6 +638,7 @@ public class AndroidGPSSimulatorView extends FrameView {
     private void conectar_desconectar(){
         Task t = null;
         if(transmisor.isConnected()){
+            //Desconectamos
             t = new Task(this.getApplication()) {
 
                 @Override
@@ -640,17 +647,23 @@ public class AndroidGPSSimulatorView extends FrameView {
                     boolean desconectado = false;
                     try{
                         desconectado = transmisor.disconnect();
+
+                        this.setMessage("Desconectado");
+                        tbtConectar.setSelected(!desconectado);
+                        tbtConectar.setText("Conectar");
                     }catch(Exception e){
+                        tbtConectar.setSelected(!desconectado);
+                        tbtConectar.setText("Desconectar");
+
                         mostrarDialogoError(e);
                     }
-                    this.setMessage("Desconectado");
-                    tbtConectar.setSelected(!desconectado);
-                    tbtConectar.setText("Conectar");
+
                     return null;
                 }
             };
         }
         else{
+            //Conectamos
             t = new Task(this.getApplication()) {
 
                 @Override
@@ -659,16 +672,23 @@ public class AndroidGPSSimulatorView extends FrameView {
                     this.setMessage("Conectando a " + configuracion.getHost() + ":" + configuracion.getPort() + " ...");
                     try{
                         conectado = transmisor.connect();
+
+                        this.setMessage("Conectado a " + configuracion.getHost() + ":" + configuracion.getPort());
+                        tbtConectar.setSelected(conectado);
+                        tbtConectar.setText("Desconectar");
                     }catch(Exception e){
+                        tbtConectar.setSelected(conectado);
+                        tbtConectar.setText("Conectar");
+                        
                         mostrarDialogoError(e);
                     }
-                    this.setMessage("Conectado a " + configuracion.getHost() + ":" + configuracion.getPort());
-                    tbtConectar.setSelected(conectado);
-                    tbtConectar.setText("Desconectar");
+
                     return null;
                 }
             };
         }
+
+        //Ejecutamos la acción
         ejecutarTarea(t);
     }
 

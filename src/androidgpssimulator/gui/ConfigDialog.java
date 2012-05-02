@@ -145,7 +145,6 @@ public class ConfigDialog extends javax.swing.JDialog {
         String host = tfHost.getText();
         String port = tfPort.getText();
 
-
         try{
             config.setHost(host);
             config.setPort(port);
